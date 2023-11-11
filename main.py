@@ -1,5 +1,7 @@
 import sys
+import typing
 from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtWidgets import QWidget
 
 class MyWidget(QtWidgets.QWidget):
 
@@ -475,11 +477,21 @@ class MyWidget(QtWidgets.QWidget):
 
         self.reset_round()
 
+class ScrollWindow(QtWidgets.QScrollArea):
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("QScrollAreaDemo")
+        self.resize(400, 400)
+
+        widget = MyWidget()
+        self.setWidget(widget)
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
-    widget = MyWidget()
-    widget.resize(800, 600)
+    widget = ScrollWindow()
+    widget.resize(200, 400)
     widget.show()
 
     sys.exit(app.exec_())
