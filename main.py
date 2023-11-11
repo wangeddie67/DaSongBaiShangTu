@@ -66,12 +66,15 @@ class MyWidget(QtWidgets.QWidget):
         #
         # Effort Groups
         #
-        effort_layout = QtWidgets.QHBoxLayout()
+        effort_card_list = ["俭以养德", "门可罗雀", "无尖不商", "时和年丰", "张灯结彩", "银装素裹", "辞旧迎新", "苛捐杂税", "硕果累累"]
+        effort_layout = QtWidgets.QGridLayout()
         self.effort_buttons = []
-        for key in ["俭以养德", "门可罗雀", "无尖不商", "时和年丰", "张灯结彩", "银装素裹", "辞旧迎新", "苛捐杂税", "硕果累累"]:
+        for idx, key in enumerate(effort_card_list):
             effort_button = QtWidgets.QPushButton(key)
             effort_button.setCheckable(True)
-            effort_layout.addWidget(effort_button)
+            col_idx = idx // 2
+            row_idx = idx % 2
+            effort_layout.addWidget(effort_button, row_idx, col_idx)
             self.effort_buttons.append(effort_button)
         effort_widget = QtWidgets.QGroupBox("效果牌")
         effort_widget.setLayout(effort_layout)
@@ -104,13 +107,13 @@ class MyWidget(QtWidgets.QWidget):
         dishes_layout.addStretch()
 
         # Store dishes
-        store_layout = QtWidgets.QHBoxLayout()
-        store_layout.addWidget(QtWidgets.QLabel("老板要建设店铺吗？"))
-        for key in self.store_dict.keys():
+        store_layout = QtWidgets.QGridLayout()
+        for idx, key in enumerate(self.store_dict.keys()):
             store_button = QtWidgets.QPushButton(key)
             store_button.clicked.connect(self.buy_store)
-            store_layout.addWidget(store_button)
-        store_layout.addStretch()
+            col_idx = idx // 2
+            row_idx = idx % 2
+            store_layout.addWidget(store_button, row_idx, col_idx)
 
         self.new_store_text = QtWidgets.QLabel()
         self.set_new_store_status()
@@ -119,6 +122,7 @@ class MyWidget(QtWidgets.QWidget):
         group1_layout = QtWidgets.QVBoxLayout()
         group1_layout.addLayout(ground_layout)
         group1_layout.addLayout(dishes_layout)
+        group1_layout.addWidget(QtWidgets.QLabel("老板要建设店铺吗？"))
         group1_layout.addLayout(store_layout)
         group1_layout.addWidget(self.new_store_text)
         group1_widget = QtWidgets.QGroupBox("第一阶段")
@@ -174,15 +178,15 @@ class MyWidget(QtWidgets.QWidget):
         buy_dishes_layout.addStretch()
 
         # Visit Store
-        visit_store_layout = QtWidgets.QHBoxLayout()
-        visit_store_layout.addWidget(QtWidgets.QLabel("客官逛一逛？"))
+        visit_store_layout = QtWidgets.QGridLayout()
         self.visit_button_list = []
-        for key in self.store_dict.keys():
+        for idx, key in enumerate(self.store_dict.keys()):
             store_button = QtWidgets.QPushButton(key)
             store_button.clicked.connect(self.visit_store)
-            visit_store_layout.addWidget(store_button)
+            col_idx = idx // 2
+            row_idx = idx % 2
+            visit_store_layout.addWidget(store_button, row_idx, col_idx)
             self.visit_button_list.append(store_button)
-        visit_store_layout.addStretch()
 
         self.eat_dish_text = QtWidgets.QLabel()
         self.set_eat_dish_status()
@@ -194,6 +198,7 @@ class MyWidget(QtWidgets.QWidget):
         group3_layout.addLayout(skip_custom_layout)
         group3_layout.addLayout(touzi_layout)
         group3_layout.addLayout(buy_dishes_layout)
+        group3_layout.addWidget(QtWidgets.QLabel("客官逛一逛？"))
         group3_layout.addLayout(visit_store_layout)
         group3_layout.addWidget(self.eat_dish_text)
         group3_layout.addWidget(self.visit_store_text)
@@ -477,21 +482,10 @@ class MyWidget(QtWidgets.QWidget):
 
         self.reset_round()
 
-class ScrollWindow(QtWidgets.QScrollArea):
-
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("QScrollAreaDemo")
-        self.resize(400, 400)
-
-        widget = MyWidget()
-        self.setWidget(widget)
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
-    widget = ScrollWindow()
-    widget.resize(200, 400)
+    widget = MyWidget()
     widget.show()
 
     sys.exit(app.exec_())
